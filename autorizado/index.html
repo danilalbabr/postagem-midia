@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Autorização do Instagram</title>
+<style>
+  body { margin: 0; padding: 24px 16px; font: 17px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; background: #f6f6f4; color: #1d1d1b; }
+  main { max-width: 480px; margin: 0 auto; background: #fff; border-radius: 14px; padding: 24px 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  h1 { font-size: 22px; margin: 0 0 12px; }
+  p { margin: 0 0 16px; }
+  button { width: 100%; padding: 14px; font: inherit; font-weight: 600; border: 0; border-radius: 10px; background: #1d1d1b; color: #fff; cursor: pointer; }
+  textarea { width: 100%; box-sizing: border-box; margin-top: 16px; padding: 10px; font: 13px/1.4 ui-monospace, Consolas, monospace; border: 1px solid #ccc; border-radius: 8px; resize: none; }
+  .aviso { font-size: 14px; color: #666; margin-top: 16px; }
+</style>
+</head>
+<body>
+<main id="caixa">
+  <h1>Esta página só serve para a autorização do Instagram</h1>
+  <p>Se você chegou aqui por engano, pode fechar.</p>
+</main>
+<script>
+  var q = new URLSearchParams(location.search);
+  var caixa = document.getElementById("caixa");
+  if (q.get("error")) {
+    caixa.innerHTML = "<h1>A autorização foi cancelada</h1><p>Nada foi liberado. Se quiser tentar de novo, peça um link novo ao Danilo.</p>";
+  } else if (q.get("code")) {
+    caixa.innerHTML =
+      "<h1>Autorização recebida ✅</h1>" +
+      "<p>Falta um passo: toque no botão, cole numa mensagem e mande para o Danilo.</p>" +
+      "<button id='copiar'>Copiar endereço</button>" +
+      "<textarea id='endereco' rows='5' readonly></textarea>" +
+      "<p class='aviso'>Este endereço vale por 1 hora e só funciona uma vez. Sozinho ele não dá acesso à sua conta.</p>";
+    var campo = document.getElementById("endereco");
+    campo.value = location.href;
+    document.getElementById("copiar").onclick = function () {
+      var botao = this;
+      function ok() { botao.textContent = "Copiado! Agora mande para o Danilo"; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(campo.value).then(ok, function () { campo.select(); document.execCommand("copy"); ok(); });
+      } else { campo.select(); document.execCommand("copy"); ok(); }
+    };
+  }
+</script>
+</body>
+</html>
